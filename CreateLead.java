@@ -1,7 +1,9 @@
-package Week1.day4;
+package Week2.day1;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.support.ui.Select;
 
 public class CreateLead {
 
@@ -10,35 +12,43 @@ public class CreateLead {
 		driver.get("http://leaftaps.com/opentaps/");
 		driver.manage().window().maximize();
 		Thread.sleep(3000);
-		driver.findElement(By.id("username")).sendKeys("demosalesmanager");
+		
+		//Collection based xpath
+		
+		driver.findElement(By.xpath("(//input[@class ='inputLogin'])[1]")).sendKeys("demosalesmanager");
+		
 		driver.findElement(By.id("password")).sendKeys("crmsfa");
 		driver.findElement(By.className("decorativeSubmit")).click();
-		driver.findElement(By.linkText("CRM/SFA")).click();
+		
+		//xpath using contains text keyword
+		
+		driver.findElement(By.xpath("//a[contains(text(),'CRM/SFA')]")).click();
+		
 		driver.findElement(By.linkText("Leads")).click();
-		driver.findElement(By.linkText("Create Lead")).click();
+		
+		driver.findElement(By.xpath("//a[text()='Create Lead']")).click();
 		driver.findElement(By.id("createLeadForm_companyName")).sendKeys("XYZ");
 		driver.findElement(By.id("createLeadForm_firstName")).sendKeys("Vinoth");
 		driver.findElement(By.id("createLeadForm_lastName")).sendKeys("Kumar");
 		driver.findElement(By.name("generalProfTitle")).sendKeys("TestWelcome");
-		driver.findElement(By.className("smallSubmit")).click();
-		String actualTitle = driver.getTitle();
-		String ExpectedTitle = "View Lead | opentaps CRM";
-		if(actualTitle.equals(ExpectedTitle))
-		{
-			System.out.println("Title verification passed! Actual title is: " + actualTitle);
-		}
-		else
-		{
-			System.out.println("Title verification failed! Expected title was: " + ExpectedTitle
-                    + " but the actual title is: " + actualTitle);
-		}
-			
-		driver.close();
+		//dropdown
+		WebElement SourceWE = driver.findElement(By.id("createLeadForm_dataSourceId"));
+		Select SourceDD = new Select(SourceWE);
+		SourceDD.selectByIndex(5);
+		
+		WebElement MarketCampign = driver.findElement(By.id("createLeadForm_marketingCampaignId"));
+		Select MarketCampignDD = new Select(MarketCampign);
+		MarketCampignDD.selectByVisibleText("Road and Track");
 		
 		
-
-	
-
+		WebElement Currency = driver.findElement(By.id("createLeadForm_currencyUomId"));
+		Select CurrencyDD = new Select(Currency);
+		CurrencyDD.selectByValue("USD");
+		
+		
+		driver.findElement(By.name("submitButton")).click();
+		
+		
 
 	}
 
